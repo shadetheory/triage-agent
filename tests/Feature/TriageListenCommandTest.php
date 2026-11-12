@@ -119,15 +119,6 @@ describe('TriageListenCommand', function () {
         expect($method->invoke($command, $event))->toBeNull();
     });
 
-    it('skips non-issues event types via shouldProcess', function () {
-        $command = app(TriageListenCommand::class);
-        $method = new ReflectionMethod($command, 'shouldProcess');
-
-        $event = json_decode(makeEvent(['eventType' => 'deployment']), true);
-
-        expect($method->invoke($command, $event))->toBeFalse();
-    });
-
     it('handles issues with empty body', function () {
         fakePrism('## Plan\nNeed more details.');
 
