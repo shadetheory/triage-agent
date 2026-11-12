@@ -14,10 +14,10 @@ describe('GitHubService', function () {
         config()->set('services.github.token', 'test-token');
 
         $service = new GitHubService;
-        $service->postComment('jordanpartridge/triage-agent', 1, 'Triage complete.');
+        $service->postComment('shadetheory/triage-agent', 1, 'Triage complete.');
 
         Http::assertSent(function ($request) {
-            return $request->url() === 'https://api.github.com/repos/jordanpartridge/triage-agent/issues/1/comments'
+            return $request->url() === 'https://api.github.com/repos/shadetheory/triage-agent/issues/1/comments'
                 && $request['body'] === 'Triage complete.';
         });
     });

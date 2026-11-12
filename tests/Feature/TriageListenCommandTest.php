@@ -19,7 +19,7 @@ function makeEvent(array $overrides = []): string
         'eventType' => 'issues',
         'payload' => [
             'action' => 'opened',
-            'repository' => ['full_name' => 'jordanpartridge/triage-agent'],
+            'repository' => ['full_name' => 'shadetheory/triage-agent'],
             'issue' => [
                 'number' => 42,
                 'title' => 'Add dark mode',
@@ -35,16 +35,16 @@ function makePrMergedEvent(array $overrides = []): string
         'eventType' => 'pull_request',
         'payload' => [
             'action' => 'closed',
-            'repository' => ['full_name' => 'jordanpartridge/triage-agent'],
+            'repository' => ['full_name' => 'shadetheory/triage-agent'],
             'pull_request' => [
                 'number' => 15,
                 'title' => 'Add authentication feature',
                 'body' => 'Implements OAuth2 login flow.',
                 'merged' => true,
                 'merged_at' => '2025-01-15T10:30:00Z',
-                'html_url' => 'https://github.com/jordanpartridge/triage-agent/pull/15',
+                'html_url' => 'https://github.com/shadetheory/triage-agent/pull/15',
                 'head' => ['ref' => 'feat/auth'],
-                'user' => ['login' => 'jordanpartridge'],
+                'user' => ['login' => 'shadetheory'],
             ],
         ],
     ], $overrides));
@@ -84,7 +84,7 @@ describe('TriageListenCommand', function () {
         expect($plan)->toBe('## Plan\nImplement dark mode.');
 
         $github = app(GitHubService::class);
-        $github->postComment('jordanpartridge/triage-agent', 42, "## 🤖 Triage Agent\n\n{$plan}");
+        $github->postComment('shadetheory/triage-agent', 42, "## 🤖 Triage Agent\n\n{$plan}");
 
         Http::assertSent(function ($request) {
             return str_contains($request->url(), '/issues/42/comments')
@@ -176,7 +176,7 @@ describe('handlePullRequestClosed', function () {
                 && in_array('--category', $cmd)
                 && $cmd[array_search('--category', $cmd) + 1] === 'architecture'
                 && in_array('--author', $cmd)
-                && $cmd[array_search('--author', $cmd) + 1] === 'jordanpartridge'
+                && $cmd[array_search('--author', $cmd) + 1] === 'shadetheory'
                 && in_array('--branch', $cmd)
                 && $cmd[array_search('--branch', $cmd) + 1] === 'feat/auth'
                 && in_array('--no-git', $cmd);
@@ -259,7 +259,7 @@ describe('handlePullRequestClosed', function () {
             $sourceIndex = array_search('--source', $cmd);
 
             return $sourceIndex !== false
-                && $cmd[$sourceIndex + 1] === 'https://github.com/jordanpartridge/triage-agent/pull/15';
+                && $cmd[$sourceIndex + 1] === 'https://github.com/shadetheory/triage-agent/pull/15';
         });
     });
 
@@ -274,8 +274,8 @@ describe('handlePullRequestClosed', function () {
             $repoIndex = array_search('--repo', $cmd);
             $tagsIndex = array_search('--tags', $cmd);
 
-            return $cmd[$repoIndex + 1] === 'jordanpartridge/triage-agent'
-                && $cmd[$tagsIndex + 1] === 'pr-merge,jordanpartridge/triage-agent';
+            return $cmd[$repoIndex + 1] === 'shadetheory/triage-agent'
+                && $cmd[$tagsIndex + 1] === 'pr-merge,shadetheory/triage-agent';
         });
     });
 
